@@ -5,61 +5,42 @@
   <meta charset="UTF-8">
   <title>Trang chủ</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-   <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
   <style>
-    /* Đoạn mã CSS được đặt ở đây */
     body {
       background-color: #529f46;
       margin: 0;
       padding: 0;
     }
 
-    .background-layer {
-      position: relative;
-      width: 100%;
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       height: 100vh;
-      background-image: url('bgr.jpg');
-      background-size: cover;
-      background-position: center;
-      z-index: 1;
     }
 
-    .foreground-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
+    #background {
       width: 100%;
-      height: 100%;
-      background-image: url('2.jpg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: right center;
-      z-index: 2;
+      height: auto;
+      object-fit: contain;
     }
 
     .upload-section {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      padding: 16px;
-      background-color: rgba(255, 255, 0, 0.8);
-      z-index: 3;
+      margin-top: 16px;
     }
 
     .upload-buttons {
-      margin-top: 16px;
+      text-align: center;
     }
 
     .upload-button {
       margin-top: 8px;
-      background-color: #529f46;
+      background-color: yellow;
       color: white;
       font-weight: bold;
-      padding: 24px 48px;
-      font-size: 32px;
+      padding: 12px 24px;
+      font-size: 16px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -67,27 +48,29 @@
 
     .upload-submit {
       margin-top: 8px;
-      background-color: #529f46;
+      background-color: yellow;
       color: white;
       font-weight: bold;
-      padding: 24px 48px;
-      font-size: 32px;
+      padding: 12px 24px;
+      font-size: 16px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
   </style>
 </head>
+
 <body>
-  <div class="background-layer"></div>
-  <div class="foreground-layer"></div>
-  <div class="upload-section">
-    <div class="upload-buttons">
-      <input type="file" id="imageUpload" hidden>
-      <input type="file" id="newBackgroundImage" hidden>
-      <button class="upload-button" onclick="handleBackgroundChange()">CHỌN HÌNH NỀN MỚI</button>
-      <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
-      <button class="upload-submit" onclick="handleUpload()">UPLOAD</button>
+  <div class="container">
+    <img id="background" src="2.jpg" alt="Ảnh nền">
+    <div class="upload-section">
+      <div class="upload-buttons">
+        <input type="file" id="imageUpload" hidden>
+        <input type="file" id="newBackgroundImage" hidden>
+        <button class="upload-button">CHỌN HÌNH NỀN MỚI</button>
+        <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
+        <button class="upload-submit">UPLOAD</button>
+      </div>
     </div>
   </div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
