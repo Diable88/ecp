@@ -1,78 +1,74 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const imageUploadInput = document.getElementById("imageUpload");
-  const newBackgroundImageInput = document.getElementById("newBackgroundImage");
-  const backgroundImgElement = document.getElementById("background");
-  const uploadSubmitButton = document.querySelector(".upload-submit");
+const API_NAME = "Nova";
+const API_KEY = "hNk5sVoMrWRYGPserpvrsqwM";
 
-  function handleImageUpload(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+async function handleUpload() {
+  const fileInput = document.getElementById('imageUpload');
+  const uploadButton = document.querySelector('.upload-submit');
+  const backgroundImage = document.getElementById("background");
 
-    reader.onload = function(event) {
-      backgroundImgElement.src = event.target.result;
-    }
+  uploadButton.disabled = true;
+  uploadButton.textContent = 'Đang xử lý...';
 
-    reader.readAsDataURL(file);
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append('size', 'auto');
+  formData.append('image_file', file);
+
+  try {
+    const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+      method: 'POST',
+      headers: {
+        'X-Api-Key': API_KEY
+      },
+      body: formData
+    });
+
+    const processedImageURL = URL.createObjectURL(await response.blob());
+    const processedImage = new Image();
+
+    processedImage.onload = function () {
+      var processedImageWidth = 170;
+      var processedImageHeight = 250;
+      var processedImageX = 1140;
+      var processedImageY = 175;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = backgroundImage.naturalWidth;
+      canvas.height = backgroundImage.naturalHeight;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(backgroundImage, 0, 0);
+      ctx.drawImage(processedImage, processedImageX, processedImageY, processedImageWidth, processedImageHeight);
+
+      backgroundImage.src = canvas.toDataURL('image/jpeg');
+
+      URL.revokeObjectURL(processedImageURL);
+
+      uploadButton.disabled = false;
+      uploadButton.textContent = 'UPLOAD';
+    };
+
+    processedImage.src = processedImageURL;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const setBackgroundImageButton = document.getElementById('changeBackground');
+const newBackgroundImageInput = document.getElementById('newBackgroundImage');
+
+setBackgroundImageButton.addEventListener('click', function () {
+  newBackgroundImageInput.click();
+});
+
+newBackgroundImageInput.addEventListener('change', function () {
+  const file = this.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const backgroundImage = document.getElementById("background");
+    backgroundImage.src = e.target.result;
   }
 
-  function handleNewBackgroundImageUpload(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-      const processedImgElement = document.createElement("img");
-      processedImgElement.src = event.target.result;
-      processedImgElement.onload = function() {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = backgroundImgElement.width;
-        canvas.height = backgroundImgElement.height;
-
-        ctx.drawImage(backgroundImgElement, 0, 0);
-        ctx.drawImage(processedImgElement, 100, 100, 200, 200);
-
-        backgroundImgElement.src = canvas.toDataURL();
-
-        URL.revokeObjectURL(processedImgElement.src);
-        processedImgElement.remove();
-      };
-    }
-
-    reader.readAsDataURL(file);
-  }
-
-  imageUploadInput.addEventListener("change", handleImageUpload);
-  newBackgroundImageInput.addEventListener("change", handleNewBackgroundImageUpload);
-
-  uploadSubmitButton.addEventListener("click", function() {
-    const formData = new FormData();
-    formData.append("file", imageUploadInput.files[0]);
-
-    axios.post("your-upload-url", formData)
-      .then(response => {
-        const processedImageUrl = response.data.processedUrl;
-
-        const processedImgElement = document.createElement("img");
-        processedImgElement.src = processedImageUrl;
-        processedImgElement.onload = function() {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-
-          canvas.width = backgroundImgElement.width;
-          canvas.height = backgroundImgElement.height;
-
-          ctx.drawImage(backgroundImgElement, 0, 0);
-          ctx.drawImage(processedImgElement, 100, 100, 200, 200);
-
-          backgroundImgElement.src = canvas.toDataURL();
-
-          URL.revokeObjectURL(processedImgElement.src);
-          processedImgElement.remove();
-        };
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  });
+  reader.readAsDataURL(file);
 });
