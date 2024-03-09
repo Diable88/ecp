@@ -1,10 +1,10 @@
-const API_NAME = "Nova";
-const API_KEY = "hNk5sVoMrWRYGPserpvrsqwM";
+const API_NAME = 'Nova';
+const API_KEY = 'hNk5sVoMrWRYGPserpvrsqwM';
 
 async function handleUpload() {
   const fileInput = document.getElementById('imageUpload');
-  const uploadButton = document.querySelector('.upload-submit');
-  const backgroundImage = document.getElementById("background");
+  const uploadButton = document.querySelector('.upload-button');
+  const imageContainer = document.querySelector('.image-container');
 
   uploadButton.disabled = true;
   uploadButton.textContent = 'Đang xử lý...';
@@ -18,29 +18,20 @@ async function handleUpload() {
     const response = await fetch('https://api.remove.bg/v1.0/removebg', {
       method: 'POST',
       headers: {
-        'X-Api-Key': API_KEY
+        'X-Api-Key': API_KEY,
       },
-      body: formData
+      body: formData,
     });
 
     const processedImageURL = URL.createObjectURL(await response.blob());
     const processedImage = new Image();
 
     processedImage.onload = function () {
-      var processedImageWidth = 170;
-      var processedImageHeight = 250;
-      var processedImageX = 1140;
-      var processedImageY = 175;
+      const originalImage = document.querySelector('.image-container img');
+      originalImage.style.display = 'none';
 
-      const canvas = document.createElement('canvas');
-      canvas.width = backgroundImage.naturalWidth;
-      canvas.height = backgroundImage.naturalHeight;
-
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(backgroundImage, 0, 0);
-      ctx.drawImage(processedImage, processedImageX, processedImageY, processedImageWidth, processedImageHeight);
-
-      backgroundImage.src = canvas.toDataURL('image/jpeg');
+      imageContainer.innerHTML = '';
+      imageContainer.appendChild(processedImage);
 
       URL.revokeObjectURL(processedImageURL);
 
@@ -51,24 +42,27 @@ async function handleUpload() {
     processedImage.src = processedImageURL;
   } catch (error) {
     console.error(error);
+
+    uploadButton.disabled = false;
+    uploadButton.textContent = 'UPLOAD';
   }
 }
 
-const setBackgroundImageButton = document.getElementById('changeBackground');
-const newBackgroundImageInput = document.getElementById('newBackgroundImage');
+const button = document.getElementById('changeBackground');
+const fileInput = document.getElementById('newBackgroundImage');
 
-setBackgroundImageButton.addEventListener('click', function () {
-  newBackgroundImageInput.click();
+button.addEventListener('click', function () {
+  fileInput.click();
 });
 
-newBackgroundImageInput.addEventListener('change', function () {
+fileInput.addEventListener('change', function () {
   const file = this.files[0];
   const reader = new FileReader();
 
   reader.onload = function (e) {
-    const backgroundImage = document.getElementById("background");
+    const backgroundImage = document.getElementById('background');
     backgroundImage.src = e.target.result;
-  }
+  };
 
   reader.readAsDataURL(file);
 });
