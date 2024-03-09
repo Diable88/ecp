@@ -33,7 +33,7 @@
 
     .upload-buttons {
       text-align: center;
-      margin: 1mm;
+      margin-top: 1mm;
     }
 
     .upload-button {
@@ -59,12 +59,24 @@
       border-radius: 4px;
       cursor: pointer;
     }
+
+    @media only screen and (max-width: 768px) {
+      .container {
+        flex-direction: column-reverse;
+      }
+
+      #background {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 0;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <img id="background" src="2.jpg" alt="Ảnh nền">
     <div class="upload-section">
       <div class="upload-buttons">
         <input type="file" id="imageUpload" hidden>
@@ -74,6 +86,7 @@
         <button class="upload-submit">UPLOAD</button>
       </div>
     </div>
+    <img id="background" src="2.jpg" alt="Ảnh nền">
   </div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
