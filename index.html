@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Trang chủ</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="style/style.css">
   <style>
     body {
       background-color: #529f46;
@@ -12,12 +12,29 @@
       padding: 0;
     }
 
-    .container {
+    .header {
+      background-color: #529f46;
+      color: yellow;
+      font-weight: bold;
+      padding: 10px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    .image-container {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      margin-top: 20px;
     }
 
     #background {
@@ -27,29 +44,18 @@
       margin-bottom: 1mm;
     }
 
-    .upload-section {
-      margin-top: 1mm;
-    }
-
-    .upload-buttons {
+    .text-container {
       text-align: center;
-      margin-top: 1mm;
+      margin: 20px;
     }
 
-    .upload-button {
-      margin-top: 1mm;
-      background-color: yellow;
-      color: white;
-      font-weight: bold;
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    .image-preview {
+      text-align: center;
+      margin-top: 20px;
     }
 
     .upload-submit {
-      margin-top: 1mm;
+      margin-top: 20px;
       background-color: yellow;
       color: white;
       font-weight: bold;
@@ -58,36 +64,36 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-    }
-
-    @media only screen and (max-width: 768px) {
-      .container {
-        flex-direction: column-reverse;
-      }
-
-      #background {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-        margin-bottom: 0;
-      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="upload-section">
-      <div class="upload-buttons">
-        <input type="file" id="imageUpload" hidden>
-        <input type="file" id="newBackgroundImage" hidden>
-        <button class="upload-button">CHỌN HÌNH NỀN MỚI</button>
-        <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
-        <button class="upload-submit">UPLOAD</button>
-      </div>
-    </div>
-    <img id="background" src="2.jpg" alt="Ảnh nền">
+  <div class="header">
+    SỐNG HẠNH PHÚC
   </div>
+  <div class="title">
+    SỐNG HẠNH PHÚC - SỐNG ECO CENTRAL PARK
+  </div>
+  <div class="image-container">
+    <div class="frame">
+      <img id="background" src="images/2.jpg" alt="Ảnh nền">
+    </div>
+  </div>
+  <div class="text-container">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu vulputate metus.
+      Integer sit amet tincidunt ipsum, at volutpat nulla. Integer pellentesque placerat erat,
+      a tincidunt felis ultricies vitae. Proin non lorem quis lorem varius facilisis.
+      Nullam consectetur tincidunt velit, vitae fermentum turpis ultricies in.
+    </p>
+  </div>
+  <div class="image-preview">
+    <h3>CHỌN ẢNH</h3>
+    <div id="imagePreview"></div>
+  </div>
+  <button class="upload-submit">UPLOAD</button>
+
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="script.js"></script>
 </body>
