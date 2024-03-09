@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Trang chủ</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="style/style.css">
   <style>
     body {
       background-color: #529f46;
@@ -86,29 +86,10 @@
         <button class="upload-submit">UPLOAD</button>
       </div>
     </div>
-    <img id="background" src="2.jpg" alt="Ảnh nền">
+    <img id="background" src="images/2.jpg" alt="Ảnh nền">
   </div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script>
-    const button = document.getElementById('changeBackground');
-    const fileInput = document.getElementById('newBackgroundImage');
-
-    button.addEventListener('click', function () {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', function () {
-      const file = this.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        const backgroundImage = document.getElementById("background");
-        backgroundImage.src = e.target.result;
-      }
-
-      reader.readAsDataURL(file);
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>
