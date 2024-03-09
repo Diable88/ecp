@@ -80,6 +80,15 @@ body {
   cursor: pointer;
 }
 
+.image-preview {
+  width: 200px;
+  height: 200px;
+  background-color: #ddd;
+  background-size: cover;
+  background-position: center;
+  margin-top: 12px;
+}
+
 .upload-button {
   background-color: yellow;
   color: white;
