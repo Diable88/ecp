@@ -29,7 +29,7 @@
 }
 
 .bar::after {
-  content: 'SỐNG VUI - CENTRAL PARK PARK';
+  content: 'SỐNG VUI - ECO CENTRAL PARK';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -93,18 +93,6 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
-.result-img {
-  margin-top: 12px;
-  width: 100%;
-  height: auto;
-}
-
-.result-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
   </style>
 </head>
 
@@ -122,11 +110,8 @@
     <div class="select-image">
       <input type="file" id="imageUpload" hidden>
         <label for="imageUpload">CHỌN ẢNH</label>
-        <div id="imagePreview" class="image-preview"></div>
     </div>
-    <button class="upload-button">UPLOAD</button>
-    <div class="result-container">
-      <img id="resultImage" class="result-img" src="" alt="Kết quả">
+    <button class="upload-button">BẮT ĐẦU</button>
     </div>
   </div>
  
@@ -221,6 +206,4 @@
     });
   </script>
 </body>
-</body>
-
 </html>
