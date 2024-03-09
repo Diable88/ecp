@@ -56,13 +56,29 @@
 
         const processedImageURL = URL.createObjectURL(await response.blob());
         const processedImage = new Image();
-
+        
         processedImage.onload = function () {
-          const originalImage = document.querySelector('.image-container img');
-          originalImage.style.display = 'none';
+          var processedImageWidth = 170;
+          var processedImageHeight = 250;
+          var processedImageX = 1140;
+          var processedImageY = 175;
 
-          imageContainer.innerHTML = '';
-          imageContainer.appendChild(processedImage);
+          const canvas = document.createElement('canvas');
+          canvas.width = imageContainer.naturalWidth;
+          canvas.height = imageContainer.naturalHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(imageContainer.querySelector('img'), 0, 0);
+          ctx.drawImage(
+            processedImage,
+            processedImageX,
+            processedImageY,
+            processedImageWidth,
+            processedImageHeight
+          );
+
+          const dataURL = canvas.toDataURL('image/jpeg');
+          imageContainer.innerHTML = `<img src="${dataURL}" alt="Ảnh">`;
 
           URL.revokeObjectURL(processedImageURL);
 
@@ -78,6 +94,25 @@
         uploadButton.textContent = 'UPLOAD';
       }
     }
+
+    const button = document.getElementById('newBackgroundButton');
+    const fileInput = document.getElementById('imageUpload');
+    
+    button.addEventListener('click', function () {
+      fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      const reader = new FileReader();
+    
+      reader.onload = function (e) {
+        const backgroundImage = document.querySelector('.image-container img');
+        backgroundImage.src = e.target.result;
+      };
+    
+      reader.readAsDataURL(file);
+    });
   </script>
 </body>
 </html>
