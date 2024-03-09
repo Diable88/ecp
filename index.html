@@ -5,6 +5,13 @@
   <meta charset="UTF-8">
   <title>Trang chủ</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    #background {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,7 +21,7 @@
       <div class="upload-buttons">
         <input type="file" id="imageUpload" hidden>
         <button id="changeBackground" hidden>CHỌN HÌNH NỀN MỚI</button>
-		<input type="file" id="newBackgroundImage" hidden>
+        <input type="file" id="newBackgroundImage" hidden>
         <input type="file" id="newBackgroundImage">
         <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
         <button class="upload-submit" onclick="handleUpload()">UPLOAD</button>
