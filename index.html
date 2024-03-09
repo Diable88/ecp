@@ -12,23 +12,34 @@
       padding: 0;
     }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    .background-layer {
+      position: relative;
+      width: 100%;
       height: 100vh;
+      background-image: url('bgr.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
     }
 
-    #background {
+    .foreground-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: auto;
-      object-fit: contain;
+      height: 100%;
+      background-image: url('2.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
+      z-index: 2;
     }
 
     .upload-section {
       margin-top: 32px;
       text-align: center;
+      position: relative;
+      z-index: 3;
     }
 
     .upload-buttons {
@@ -62,18 +73,23 @@
 </head>
 
 <body>
-  <div class="container">
-    <img id="background" src="2.jpg" alt="Hình nền cố định">
-    <div class="upload-section">
-      <div class="upload-buttons">
-        <input type="file" id="imageUpload" hidden>
-        <input type="file" id="newBackgroundImage" hidden>
-        <button class="upload-button" onclick="handleBackgroundChange()">CHỌN HÌNH NỀN MỚI</button>
-        <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
-        <button class="upload-submit" onclick="handleUpload()">UPLOAD</button>
-      </div>
+  <div class="background-layer"></div>
+  <div class="foreground-layer"></div>
+  <div class="upload-section">
+    <div class="upload-buttons">
+      <input type="file" id="imageUpload" hidden>
+      <input type="file" id="newBackgroundImage" hidden>
+      <button class="upload-button" onclick="handleBackgroundChange()">CHỌN HÌNH NỀN MỚI</button>
+      <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
+      <button class="upload-submit" onclick="handleUpload()">UPLOAD</button>
     </div>
   </div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     const API_NAME = "Nova";
@@ -163,7 +179,6 @@
 
       reader.readAsDataURL(file);
     });
- </script>
+     </script>
 </body>
-
 </html>
