@@ -79,16 +79,23 @@ body {
   border-radius: 4px;
   margin-right: 12px;
   cursor: pointer;
+  transform-style: preserve-3d;
+  transform: translateZ(10px);
+  box-shadow: 0px 0px 20px yellow;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .select-image label:hover {
-  transform: translateZ(10px);
-  box-shadow: 0px 0px 20px yellow;
+  transform: translateZ(0);
+  box-shadow: none;
+}
+
+.select-image label:hover {
+  color: yellow;
 }
 
 .upload-button {
-  background-color: #529f46;
+  background-color: yellow;
   color: white;
   font-weight: bold;
   padding: 12px 24px;
@@ -96,10 +103,17 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transform-style: preserve-3d;
+  transform: translateZ(10px);
+  box-shadow: 0px 0px 20px #529f46;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .upload-button:hover {
-  transform: translateZ(10px);
-  box-shadow: 0px 0px 20px yellow;
+  transform: translateZ(0);
+  box-shadow: none;
+}
+
+.upload-button:hover {
+  color: #529f46;
 }
