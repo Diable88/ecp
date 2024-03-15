@@ -64,8 +64,7 @@
     justify-content: center;
   }
 }
-.upload-button,
-.upload-submit,
+.upload-button,.upload-submit, #addText {
 #changeBackground {
   display: inline-block;
   padding: 10px 20px;
