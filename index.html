@@ -1,124 +1,235 @@
-<!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
   <title>Trang chủ</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
 </head>
 
 <body>
-	<div class="text-box">
-		<p>SỐNG HẠNH PHÚC - SỐNG ECO CENTRAL PARK</p>
-	</div>
-	<div class="container">
-		<img id="background" src="2.jpg" alt="Hình nền cố định"
-			loading="lazy">
-		<div class="upload-section">
-			<div class="upload-buttons">
-				<input type="file" id="imageUpload" hidden>
-				<button id="changeBackground" hidden>CHỌN HÌNH NỀN MỚI</button>
-				<input type="file" id="newBackgroundImage" hidden>
-				<input type="file" id="newBackgroundImage">
-				<label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
-				<button class="upload-submit" onclick="handleUpload()">UPLOAD</button>
-			</div>
-		</div>
-	</div>
+  <div class="text-box">
+    <p>SỐNG HẠNH PHÚC - SỐNG ECO CENTRAL PARK</p>
+  </div>
+  <div class="container">
+    <img id="background" src="2.jpg" alt="Hình nền cố định" loading="lazy">
+    <div class="upload-section">
+      <div class="upload-buttons d-flex align-items-start">
+
+        <button id="changeBackground" hidden>CHỌN HÌNH NỀN MỚI</button>
+        <input type="file" id="newBackgroundImage" hidden>
+
+        <input type="file" id="imageUpload" hidden>
+        <label for="imageUpload" class="upload-button">CHỌN ẢNH</label>
+
+        <div class="d-flex flex-column">
+          <button class="upload-submit">UPLOAD</button>
+          <div id="noImageChosen" class="text-danger d-none">Chưa chọn ảnh</div>
+         <a href="final.html" id="linkToFinal"><button id="addText" hidden>Viết thông điệp</button>
+         </a>
+         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crop ảnh -->
+  <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="cropModalLabel">Điều chỉnh kích thước ảnh</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="crop-container" style="height: 500px;">
+            <img id="cropper-image" class="h-100 w-100" style="max-width: 100%;" src="" alt="Ảnh cần crop">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tắt</button>
+          <button type="button" class="btn btn-primary" id="cropModalSubmitButton">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
- <script>
-    const API_NAME = "11111";
-    const API_KEY = "ZhdsmrvYAwbSwwjMbNVh7Lzf";
-    async function handleUpload() {
-  const fileInput = document.getElementById('imageUpload');
-  const uploadButton = document.querySelector('.upload-submit');
-  const backgroundImage = document.getElementById("background");
+  <script>
+    function dataURLtoBlob(dataURL)
+    {
+      const byteString = atob(dataURL.split(',')[1]);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
 
-  uploadButton.disabled = true;
-  uploadButton.textContent = 'Đang xử lý...';
+      for (let i = 0; i < byteString.length; i++)
+      {
+        ia[i] = byteString.charCodeAt(i);
+      }
 
-  const file = fileInput.files[0];
-  
-  // Đọc ảnh gốc và tạo một Image để lấy kích thước
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      return new Blob([ab], { type: 'image/png' }); // Đặt kiểu MIME tương ứng với loại ảnh bạn đang sử dụng
+    }
+  </script>
+  <script>
+    const API_NAME = "23456";
+    const API_KEY = "x7vWBK76hkL28kZCbeq1JWCr";
+    let croppedDataURL = "";
+    const fileInput = $('#imageUpload')[0];
+    const uploadButton = $('.upload-submit');
+    const backgroundImage = $('#background')[0];
+    const isImageChosen = $('#noImageChosen');
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    const screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
-      // Tính toán kích thước và tọa độ cắt để crop ảnh thành hình vuông
-      let size = Math.min(img.width, img.height);
-      let x = (img.width - size) / 2;
-      let y = (img.height - size) / 2;
+    $(document).ready(function ()
+    {
+      $('.upload-submit').on('click', function ()
+      {
+        handleUpload();
+      });
 
-      // Crop ảnh thành hình vuông
-      canvas.width = size;
-      canvas.height = size;
-      ctx.drawImage(img, x, y, size, size, 0, 0, size, size);
+      $('#imageUpload').on('change', function ()
+      {
+        $('#cropModal').modal('show');
+        $('#cropModal').on('shown.bs.modal', function ()
+        {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
 
-      // Chuyển canvas thành dạng blob và tạo FormData để gửi đi remove.bg
-      canvas.toBlob(async function(blob) {
-        const formData = new FormData();
-        formData.append('size', 'auto');
-        formData.append('image_file', blob);
+          reader.onload = function (e)
+          {
+            const cropperImage = $('#cropper-image');
+            cropperImage.attr('src', e.target.result);
 
-        try {
-          // Tiến hành gửi ảnh đã crop đi remove.bg
-          const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-            method: 'POST',
-            headers: {
-              'X-Api-Key': API_KEY
-            },
-            body: formData
-          });
+            const cropper = new Cropper(cropperImage[0], {
+              aspectRatio: NaN,
+              autoCropArea: 1,
+              viewMode: 1
+            });
 
-          const processedImageURL = URL.createObjectURL(await response.blob());
-          const processedImage = new Image();
+            function handleCropSubmit()
+            {
+              const croppedCanvas = cropper.getCroppedCanvas();
+              croppedDataURL = croppedCanvas.toDataURL(file.type);
+              $('#cropModal').modal('hide');
+            }
 
-          processedImage.onload = function() {
-            var processedImageWidth = 140;
-            var processedImageHeight = 210;
-            var processedImageX = 630;
-            var processedImageY = 104;
+            $('#cropModalSubmitButton').on('click', handleCropSubmit);
 
-            const canvas = document.createElement('canvas');
-            canvas.width = backgroundImage.naturalWidth;
-            canvas.height = backgroundImage.naturalHeight;
-
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(backgroundImage, 0, 0);
-            ctx.drawImage(processedImage, processedImageX, processedImageY, processedImageWidth, processedImageHeight);
-
-            backgroundImage.src = canvas.toDataURL('image/jpeg');
-
-            URL.revokeObjectURL(processedImageURL);
-
-            uploadButton.disabled = false;
-            uploadButton.textContent = 'UPLOAD';
+            $('#cropModal').on('hidden.bs.modal', function ()
+            {
+              fileInput.value = "";
+              cropper.destroy();
+            });
           };
 
-          processedImage.src = processedImageURL;
+          reader.readAsDataURL(file);
+        });
 
-          uploadButton.disabled = false;
-          uploadButton.textContent = 'UPLOAD';
-        } catch (error) {
-          console.error(error);
+      });
+    });
 
-          uploadButton.disabled = false;
-          uploadButton.textContent = 'UPLOAD';
-        }
-      }, 'image/jpeg');
-    };
+    async function handleUpload()
+    {
+      uploadButton.prop('disabled', true);
+      uploadButton.text('Đang xử lý...');
 
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
+      if (croppedDataURL === "")
+      {
+        uploadButton.prop('disabled', false);
+        uploadButton.text('UPLOAD');
+        isImageChosen.removeClass('d-none');
+        return;
+      }
+      console.log(croppedDataURL);
 
-// Các phần mã khác không thay đổi
+      var byteString = atob(croppedDataURL.split(',')[1]);
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++)
+      {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      // Tạo đối tượng Blob từ ArrayBuffer
+      var blob = new Blob([ab], { type: 'image/png' });
+
+      // Tạo đối tượng File từ Blob
+      var file = new File([blob], 'filename.png', { type: 'image/png' });
+
+      isImageChosen.addClass('d-none');
+      const formData = new FormData();
+      formData.append('size', 'auto');
+      formData.append('image_file', file);
+
+      try
+      {
+        const response = await axios.post('https://api.remove.bg/v1.0/removebg', formData, {
+          headers: {
+            'X-Api-Key': API_KEY,
+          },
+          responseType: 'blob',
+        });
+
+        const processedImageBlob = await response.data;
+        const processedImageURL = URL.createObjectURL(processedImageBlob);
+        const processedImage = new Image();
+
+        processedImage.onload = function ()
+        {
+          var processedImageWidth = 768;
+          var processedImageHeight = 1024;
+          var processedImageX = 1000;
+          var processedImageY = 20;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = backgroundImage.naturalWidth;
+          canvas.height = backgroundImage.naturalHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(backgroundImage, 0, 0);
+          ctx.drawImage(processedImage, processedImageX, processedImageY, processedImageWidth, processedImageHeight);
+
+          backgroundImage.src = canvas.toDataURL('image/jpeg');
+
+          URL.revokeObjectURL(processedImageURL);
+
+          uploadButton.prop('disabled', false);
+          uploadButton.text('UPLOAD');
+        };
+
+        processedImage.src = processedImageURL;
+
+        uploadButton.prop('disabled', false);
+        uploadButton.text('UPLOAD');
+      } catch (error)
+      {
+        console.error(error);
+
+        uploadButton.prop('disabled', false);
+        uploadButton.text('UPLOAD');
+      }
+    }
   </script>
+    <script>
+    // Hàm để hiển thị nút mới
+    function showNewButton() {
+        document.getElementById("addText").hidden = false; // Loại bỏ thuộc tính hidden để hiển thị nút
+    }
+
+    // Gắn hàm showNewButton với sự kiện nhấn nút upload
+    document.getElementById("imageUpload").addEventListener("change", function() {
+        if (this.files && this.files.length > 0) {
+            showNewButton(); // Hiển thị nút mới nếu có file được chọn
+        }
+    });
+</script>
 </body>
 
 </html>
